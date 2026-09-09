@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Product Catalog (KSH) – Firebase</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .form-group input {
+            flex: 1 1 180px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #3498db;
+        }
+
+        .form-group button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .form-group button:hover {
+            background: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #34495e;
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background: #f1f9ff;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .loading {
+            text-align: center;
+            color: #3498db;
+            padding: 20px;
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Shared Product Catalog (KSH)</h1>
+
+        <!-- Add Product Form -->
+        <div class="form-group">
+            <input type="text" id="productName" placeholder="Product name" required>
+            <input type="number" id="productCost" placeholder="Cost (KSH)" min="0" step="0.01" required>
+            <input type="text" id="productLocation" placeholder="Where to find it" required>
+            <input type="tel" id="productPhone" placeholder="Phone number" required>
+            <button id="addBtn">Add Product</button>
+        </div>
+
+        <div id="errorMessage" class="error" style="display: none;"></div>
+
+        <!-- Products Table -->
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Cost (KSH)</th>
+                    <th>Location</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Rows inserted by JS -->
+            </tbody>
+        </table>
+        <div id="statusMessage" class="loading">Loading products...</div>
+    </div>
+
+    <!-- Firebase App (CDN) -->
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // ✅ YOUR FIREBASE CONFIG (already filled in)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIi2SyI8jsS82Yzb5SGmmdalSieeAJhns",
+            authDomain: "trade-2c56d.firebaseapp.com",
+            projectId: "trade-2c56d",
+            storageBucket: "trade-2c56d.firebasestorage.app",
+            messagingSenderId: "458341053512",
+            appId: "1:458341053512:web:0a7bce1f7d430e5a45947d",
+            measurementId: "G-H1LGNW7LJD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const productsCollection = collection(db, "products");
+
+        // DOM elements
+        const tableBody = document.getElementById('tableBody');
+        const statusMessage = document.getElementById('statusMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const addBtn = document.getElementById('addBtn');
+
+        const nameInput = document.getElementById('productName');
+        const costInput = document.getElementById('productCost');
+        const locationInput = document.getElementById('productLocation');
+        const phoneInput = document.getElementById('productPhone');
+
+        // Format cost as KSH with thousands separator
+        function formatCost(amount) {
+            return 'KSH ' + Number(amount).toLocaleString('en-KE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Show error message
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 4000);
+        }
+
+        // Render products from snapshot
+        function renderProducts(snapshot) {
+            tableBody.innerHTML = '';
+            if (snapshot.empty) {
+                statusMessage.textContent = 'No products yet. Add the first one!';
+                statusMessage.className = 'empty-message';
+                statusMessage.style.display = 'block';
+                return;
+            }
+            statusMessage.style.display = 'none';
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${escapeHtml(data.name)}</td>
+                    <td>${formatCost(data.cost)}</td>
+                    <td>${escapeHtml(data.location)}</td>
+                    <td>${escapeHtml(data.phone)}</td>
+                    <td><button class="delete-btn" data-id="${doc.id}">Delete</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Attach delete listeners
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.getAttribute('data-id');
+                    try {
+                        await deleteDoc(doc(db, "products", id));
+                    } catch (error) {
+                        console.error("Error deleting document: ", error);
+                        showError("Failed to delete product. Check console for details.");
+                    }
+                });
+            });
+        }
+
+        // Real-time listener
+        const q = query(productsCollection, orderBy("createdAt", "asc")); // optional ordering
+        onSnapshot(q, (snapshot) => {
+            renderProducts(snapshot);
+        }, (error) => {
+            console.error("Firestore error: ", error);
+            statusMessage.textContent = "Error loading products. Please try again.";
+            statusMessage.className = 'error';
+        });
+
+        // Add a product
+        async function addProduct() {
+            const name = nameInput.value.trim();
+            const cost = parseFloat(costInput.value);
+            const location = locationInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (!name || isNaN(cost) || !location || !phone) {
+                showError('Please fill in all fields with valid data.');
+                return;
+            }
+
+            try {
+                await addDoc(productsCollection, {
+                    name,
+                    cost,
+                    location,
+                    phone,
+                    createdAt: new Date() // for ordering
+                });
+                // Clear inputs
+                nameInput.value = '';
+                costInput.value = '';
+                locationInput.value = '';
+                phoneInput.value = '';
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                showError("Failed to add product. Check console for details.");
+            }
+        }
+
+        // Event listeners
+        addBtn.addEventListener('click', addProduct);
+        [nameInput, costInput, locationInput, phoneInput].forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addProduct();
+                }
+            });
+        });
+
+        // Initial message
+        statusMessage.textContent = 'Loading products...';
+        statusMessage.className = 'loading';
+        statusMessage.style.display = 'block';
+    </script>
+</body>
+</html>
