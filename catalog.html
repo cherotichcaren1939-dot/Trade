@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6f9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
             display: flex;
             justify-content: center;
@@ -24,7 +24,7 @@
         .container {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             padding: 30px;
             width: 100%;
             max-width: 900px;
@@ -33,99 +33,262 @@
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .form-section h2 {
+            font-size: 16px;
+            color: #34495e;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .form-group {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 0;
         }
 
         .form-group input {
-            flex: 1 1 180px;
-            padding: 10px;
-            border: 1px solid #ddd;
+            flex: 1 1 160px;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
             border-radius: 6px;
             font-size: 14px;
             outline: none;
-            transition: border 0.2s;
+            transition: all 0.3s;
         }
 
         .form-group input:focus {
-            border-color: #3498db;
+            border-color: #667eea;
+            background-color: #f0f4ff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+            font-weight: 500;
         }
 
         .form-group button {
-            padding: 10px 20px;
-            background: #3498db;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background 0.2s;
+            font-weight: 600;
+            transition: all 0.3s;
+            min-width: 120px;
         }
 
         .form-group button:hover {
-            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-group button:active {
+            transform: translateY(0);
+        }
+
+        .form-group button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e74c3c;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-section h2 {
+            font-size: 16px;
+            color: #34495e;
+            margin-bottom: 15px;
+            font-weight: 600;
+            margin-top: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 0;
         }
 
         th, td {
-            padding: 12px 15px;
+            padding: 14px 15px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
         }
 
         th {
-            background: #f8f9fa;
+            background: #f0f4ff;
             color: #34495e;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            color: #2c3e50;
+            font-size: 14px;
         }
 
         tr:hover td {
-            background: #f1f9ff;
+            background: #f8f9fa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 8px;
         }
 
         .delete-btn {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
-            transition: background 0.2s;
+            font-weight: 600;
+            transition: all 0.2s;
         }
 
         .delete-btn:hover {
-            background: #c0392b;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+        }
+
+        .delete-btn:active {
+            transform: translateY(0);
         }
 
         .empty-message {
             text-align: center;
             color: #7f8c8d;
-            padding: 20px;
+            padding: 40px 20px;
             font-style: italic;
+            font-size: 16px;
         }
 
         .loading {
             text-align: center;
-            color: #3498db;
-            padding: 20px;
+            color: #667eea;
+            padding: 40px 20px;
+            font-size: 16px;
         }
 
-        .error {
-            color: #e74c3c;
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 6px;
             text-align: center;
-            margin-bottom: 10px;
+            margin-top: 20px;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                flex-direction: column;
+            }
+
+            .form-group input,
+            .form-group button {
+                width: 100%;
+                flex: 1 1 auto;
+            }
+
+            th, td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+
+            .delete-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
         }
     </style>
 </head>
@@ -133,33 +296,53 @@
     <div class="container">
         <h1>📦 Shared Product Catalog (KSH)</h1>
 
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message"></div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error"></div>
+
         <!-- Add Product Form -->
-        <div class="form-group">
-            <input type="text" id="productName" placeholder="Product name" required>
-            <input type="number" id="productCost" placeholder="Cost (KSH)" min="0" step="0.01" required>
-            <input type="text" id="productLocation" placeholder="Where to find it" required>
-            <input type="tel" id="productPhone" placeholder="Phone number" required>
-            <button id="addBtn">Add Product</button>
+        <div class="form-section">
+            <h2>➕ Add New Product</h2>
+            <div class="form-group">
+                <input type="text" id="productName" placeholder="e.g., Laptop Dell" required aria-label="Product name">
+                <input type="number" id="productCost" placeholder="e.g., 50000" min="0" step="0.01" required aria-label="Cost in KSH">
+                <input type="text" id="productLocation" placeholder="e.g., Westlands Shop" required aria-label="Where to find it">
+                <input type="tel" id="productPhone" placeholder="e.g., +254712345678" required aria-label="Phone number">
+                <button id="addBtn">Add Product</button>
+            </div>
         </div>
 
-        <div id="errorMessage" class="error" style="display: none;"></div>
+        <!-- Products Table Section -->
+        <div class="table-section">
+            <h2>📋 Product Inventory</h2>
 
-        <!-- Products Table -->
-        <table id="productTable">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Cost (KSH)</th>
-                    <th>Location</th>
-                    <th>Phone</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <!-- Rows inserted by JS -->
-            </tbody>
-        </table>
-        <div id="statusMessage" class="loading">Loading products...</div>
+            <!-- Products Table -->
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Cost (KSH)</th>
+                        <th>Location</th>
+                        <th>Contact</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Rows inserted by JS -->
+                </tbody>
+            </table>
+            <div id="statusMessage" class="loading">
+                <div class="spinner"></div>
+                Loading products...
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div id="statsDiv" class="stats" style="display: none;">
+            Total Products: <span id="productCount">0</span>
+        </div>
     </div>
 
     <!-- Firebase App (CDN) -->
@@ -188,7 +371,10 @@
         const tableBody = document.getElementById('tableBody');
         const statusMessage = document.getElementById('statusMessage');
         const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
         const addBtn = document.getElementById('addBtn');
+        const statsDiv = document.getElementById('statsDiv');
+        const productCount = document.getElementById('productCount');
 
         const nameInput = document.getElementById('productName');
         const costInput = document.getElementById('productCost');
@@ -212,72 +398,149 @@
 
         // Show error message
         function showError(msg) {
-            errorMessage.textContent = msg;
+            errorMessage.textContent = '❌ ' + msg;
             errorMessage.style.display = 'block';
             setTimeout(() => {
                 errorMessage.style.display = 'none';
-            }, 4000);
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(msg) {
+            successMessage.textContent = '✅ ' + msg;
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Validate inputs
+        function validateInputs() {
+            const name = nameInput.value.trim();
+            const cost = costInput.value.trim();
+            const location = locationInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (!name) {
+                showError('Please enter a product name.');
+                nameInput.focus();
+                return false;
+            }
+
+            if (!cost || isNaN(parseFloat(cost)) || parseFloat(cost) < 0) {
+                showError('Please enter a valid cost (must be a positive number).');
+                costInput.focus();
+                return false;
+            }
+
+            if (!location) {
+                showError('Please enter where the product can be found.');
+                locationInput.focus();
+                return false;
+            }
+
+            if (!phone) {
+                showError('Please enter a contact phone number.');
+                phoneInput.focus();
+                return false;
+            }
+
+            return true;
         }
 
         // Render products from snapshot
         function renderProducts(snapshot) {
             tableBody.innerHTML = '';
+            const productList = [];
+
             if (snapshot.empty) {
-                statusMessage.textContent = 'No products yet. Add the first one!';
+                statusMessage.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="font-size: 48px; margin-bottom: 10px;">📭</p><p>No products yet. Add your first product to get started!</p></div>';
                 statusMessage.className = 'empty-message';
                 statusMessage.style.display = 'block';
+                statsDiv.style.display = 'none';
                 return;
             }
+
             statusMessage.style.display = 'none';
 
             snapshot.forEach((doc) => {
                 const data = doc.data();
+                productList.push(data);
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${escapeHtml(data.name)}</td>
+                    <td><strong>${escapeHtml(data.name)}</strong></td>
                     <td>${formatCost(data.cost)}</td>
                     <td>${escapeHtml(data.location)}</td>
-                    <td>${escapeHtml(data.phone)}</td>
-                    <td><button class="delete-btn" data-id="${doc.id}">Delete</button></td>
+                    <td><a href="tel:${escapeHtml(data.phone)}" style="color: #667eea; text-decoration: none; font-weight: 500;">${escapeHtml(data.phone)}</a></td>
+                    <td>
+                        <div class="action-cell">
+                            <button class="delete-btn" data-id="${doc.id}" title="Delete this product">🗑️ Delete</button>
+                        </div>
+                    </td>
                 `;
                 tableBody.appendChild(row);
             });
 
+            // Update stats
+            productCount.textContent = productList.length;
+            statsDiv.style.display = 'block';
+
             // Attach delete listeners
             document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', async function() {
+                btn.addEventListener('click', async function(e) {
+                    e.preventDefault();
                     const id = this.getAttribute('data-id');
-                    try {
-                        await deleteDoc(doc(db, "products", id));
-                    } catch (error) {
-                        console.error("Error deleting document: ", error);
-                        showError("Failed to delete product. Check console for details.");
+                    const productName = productList.find(p => {
+                        // This is a simple match; in production you'd want a better mapping
+                        return true;
+                    });
+
+                    // Confirmation dialog
+                    if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                        this.disabled = true;
+                        this.textContent = '🔄 Deleting...';
+
+                        try {
+                            await deleteDoc(doc(db, "products", id));
+                            showSuccess('Product deleted successfully.');
+                        } catch (error) {
+                            console.error("Error deleting document: ", error);
+                            showError('Failed to delete product. Please try again.');
+                            this.disabled = false;
+                            this.textContent = '🗑️ Delete';
+                        }
                     }
                 });
             });
         }
 
         // Real-time listener
-        const q = query(productsCollection, orderBy("createdAt", "asc")); // optional ordering
+        const q = query(productsCollection, orderBy("createdAt", "desc")); // ordered by newest first
         onSnapshot(q, (snapshot) => {
             renderProducts(snapshot);
         }, (error) => {
             console.error("Firestore error: ", error);
-            statusMessage.textContent = "Error loading products. Please try again.";
+            statusMessage.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="font-size: 48px; margin-bottom: 10px;">⚠️</p><p>Error loading products. Please check your internet connection and try refreshing the page.</p></div>';
             statusMessage.className = 'error';
+            statusMessage.style.display = 'block';
         });
 
         // Add a product
         async function addProduct() {
+            if (!validateInputs()) {
+                return;
+            }
+
             const name = nameInput.value.trim();
             const cost = parseFloat(costInput.value);
             const location = locationInput.value.trim();
             const phone = phoneInput.value.trim();
 
-            if (!name || isNaN(cost) || !location || !phone) {
-                showError('Please fill in all fields with valid data.');
-                return;
-            }
+            // Disable button during submission
+            addBtn.disabled = true;
+            const originalText = addBtn.textContent;
+            addBtn.textContent = '⏳ Adding...';
 
             try {
                 await addDoc(productsCollection, {
@@ -285,16 +548,24 @@
                     cost,
                     location,
                     phone,
-                    createdAt: new Date() // for ordering
+                    createdAt: new Date()
                 });
+
                 // Clear inputs
                 nameInput.value = '';
                 costInput.value = '';
                 locationInput.value = '';
                 phoneInput.value = '';
+                nameInput.focus();
+
+                showSuccess(`"${name}" added successfully!`);
             } catch (error) {
                 console.error("Error adding document: ", error);
-                showError("Failed to add product. Check console for details.");
+                showError('Failed to add product. Please try again.');
+            } finally {
+                // Re-enable button
+                addBtn.disabled = false;
+                addBtn.textContent = originalText;
             }
         }
 
@@ -309,7 +580,7 @@
         });
 
         // Initial message
-        statusMessage.textContent = 'Loading products...';
+        statusMessage.innerHTML = '<div class="spinner"></div>Loading products...';
         statusMessage.className = 'loading';
         statusMessage.style.display = 'block';
     </script>
